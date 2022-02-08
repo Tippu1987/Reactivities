@@ -23,7 +23,7 @@ function App() {
     setSelectedActivity(activities.find((x) => x.id === id));
   }
   function handleFormOpen(id?: string) {
-    console.log("handle form open called in App.tsx, id=" + id);
+    console.log("In Handle Form Open, Id= "+id);
     id ? handleSelectActivity(id) : handleCancelActivity();
     setEditMode(true);
   }
@@ -32,6 +32,7 @@ function App() {
   }
 
   function handleCancelActivity() {
+    console.log('In HandleCancel');
     setSelectedActivity(undefined);
   }
   return (

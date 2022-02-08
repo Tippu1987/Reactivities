@@ -27,12 +27,12 @@ export default function ActivityDetails({
         <ButtonGroup widths="2">
           <Button
             basic
-            onClick={() => handleEdit}
+            onClick={() => handleEdit(activity.id)}
             color="green"
             content="Edit"
           />
           <Button
-            onClick={()=>handleCancelActivity}
+            onClick={()=>handleCancelActivity()}
             basic
             color="red"
             content="Cancel"

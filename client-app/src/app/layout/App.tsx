@@ -8,11 +8,9 @@ import NavBar from "./NavBar";
 import ActivityDashBoard from "../../features/activities/dashboard/ActivityDashBoard";
 
 function App() {
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [selectedActivity, setSelectedActivity] = useState<
-    Activity | undefined
-  >(undefined);
-  const [editMode, setEditMode] = useState(false);
+  const [ activities, setActivities ] = useState<Activity[]>([]);
+  const [ selectedActivity, setSelectedActivity ] = useState<Activity | undefined>(undefined);
+  const [ editMode, setEditMode ] = useState(false);
   useEffect(() => {
     axios
       .get<Activity[]>("http://localhost:5000/api/Activities")
@@ -25,6 +23,7 @@ function App() {
     setSelectedActivity(activities.find((x) => x.id === id));
   }
   function handleFormOpen(id?: string) {
+    console.log("handle form open called in App.tsx, id=" + id);
     id ? handleSelectActivity(id) : handleCancelActivity();
     setEditMode(true);
   }
@@ -37,6 +36,7 @@ function App() {
   }
   return (
     <>
+      {console.log("Edit mode: " + editMode)}
       <NavBar handleFormOpen={handleFormOpen} />
       <Container style={{ marginTop: "7em" }}>
         <ActivityDashBoard

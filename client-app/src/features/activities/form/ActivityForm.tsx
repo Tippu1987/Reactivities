@@ -8,7 +8,6 @@ interface Props {
 }
 
 export default function ActivityForm({ handleFormClose, activity }: Props) {
-  {console.log('In Activity Form: activity = '+ activity)}
   return (
     <Segment clearing>
       <Form>

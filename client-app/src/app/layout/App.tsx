@@ -15,7 +15,6 @@ function App() {
     axios
       .get<Activity[]>("http://localhost:5000/api/Activities")
       .then((response) => {
-        console.log(response);
         setActivities(response.data);
       });
   }, []);
@@ -23,7 +22,6 @@ function App() {
     setSelectedActivity(activities.find((x) => x.id === id));
   }
   function handleFormOpen(id?: string) {
-    console.log("In Handle Form Open, Id= "+id);
     id ? handleSelectActivity(id) : handleCancelActivity();
     setEditMode(true);
   }
@@ -32,12 +30,10 @@ function App() {
   }
 
   function handleCancelActivity() {
-    console.log('In HandleCancel');
     setSelectedActivity(undefined);
   }
   return (
     <>
-      {console.log("Edit mode: " + editMode)}
       <NavBar handleFormOpen={handleFormOpen} />
       <Container style={{ marginTop: "7em" }}>
         <ActivityDashBoard

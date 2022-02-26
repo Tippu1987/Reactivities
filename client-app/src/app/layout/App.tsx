@@ -32,6 +32,12 @@ function App() {
   function handleCancelActivity() {
     setSelectedActivity(undefined);
   }
+  function handleEditOrCreateAtivity(activity:Activity){
+    activity.id?setActivities([...activities.filter(x=>x.id!==activity.id),activity])
+    :setActivities([...activities,activity]);
+    setEditMode(false);
+    setSelectedActivity(activity);
+    }
   return (
     <>
       <NavBar handleFormOpen={handleFormOpen} />
@@ -44,6 +50,7 @@ function App() {
           handleFormClose={handleFormClose}
           editMode={editMode}
           handleSelectedActivity={handleSelectActivity}
+          handleEditOrCreateAtivity={handleEditOrCreateAtivity}
         />
       </Container>
     </>

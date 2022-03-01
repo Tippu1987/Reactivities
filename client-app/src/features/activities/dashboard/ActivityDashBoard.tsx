@@ -13,6 +13,7 @@ interface Props {
   handleFormClose: () => void;
   editMode: boolean;
   handleEditOrCreateAtivity: (activity: Activity)=>void;
+  handleDeleteActivity:(id:string)=>void;
 }
 
 export default function ActivityDashBoard({
@@ -23,7 +24,8 @@ export default function ActivityDashBoard({
   handleSelectedActivity,
   handleFormOpen,
   handleFormClose,
-  handleEditOrCreateAtivity
+  handleEditOrCreateAtivity,
+  handleDeleteActivity
 }: Props) {
   return (
     <Grid>
@@ -31,6 +33,7 @@ export default function ActivityDashBoard({
         <ActivityList
           activities={activities}
           handleSelectedActivity={handleSelectedActivity}
+          handleDeleteActivity={handleDeleteActivity}
         />
       </GridColumn>
       <GridColumn width="6">

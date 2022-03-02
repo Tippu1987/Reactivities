@@ -7,20 +7,21 @@ import { Activity } from "../models/activity";
 import NavBar from "./NavBar";
 import ActivityDashBoard from "../../features/activities/dashboard/ActivityDashBoard";
 import {v4 as uuid} from 'uuid';
+import agent from "../api/agent";
 
 function App() {
   const [ activities, setActivities ] = useState<Activity[]>([]);
   const [ selectedActivity, setSelectedActivity ] = useState<Activity | undefined>(undefined);
   const [ editMode, setEditMode ] = useState(false);
   useEffect(() => {
-    axios
-      .get<Activity[]>("http://localhost:5000/api/Activities")
-      .then((response) => {
-        setActivities(response.data);
-      });
-  }, []);
+    agent.Activities.list().then((response) =>{
+      response.map(x=>x.date=x.date.split('T')[0]);
+      setActivities(response);
+   });
+  },[]);
   function handleSelectActivity(id: string) {
     setSelectedActivity(activities.find((x) => x.id === id));
+    setEditMode(false);
   }
   function handleFormOpen(id?: string) {
     id ? handleSelectActivity(id) : handleCancelActivity();
@@ -40,7 +41,10 @@ function App() {
     setSelectedActivity(activity);
     }
     function handleDeleteActivity(id: string){
-      setActivities([...activities.filter(x=>x.id!==id)]);
+      console.log('id='+id);
+      let x=[...activities.filter(x=>x.id!==id)];
+      console.log(x);
+      setActivities(x);
     }
 
   return (
@@ -62,5 +66,4 @@ function App() {
     </>
   );
 }
-
 export default App;

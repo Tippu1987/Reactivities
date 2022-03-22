@@ -8,15 +8,20 @@ import NavBar from "./NavBar";
 import ActivityDashBoard from "../../features/activities/dashboard/ActivityDashBoard";
 import {v4 as uuid} from 'uuid';
 import agent from "../api/agent";
+import LoadingComponent from "./LoadingComponent";
 
 function App() {
   const [ activities, setActivities ] = useState<Activity[]>([]);
   const [ selectedActivity, setSelectedActivity ] = useState<Activity | undefined>(undefined);
   const [ editMode, setEditMode ] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting,setSubmitting] =useState(false);
+
   useEffect(() => {
     agent.Activities.list().then((response) =>{
       response.map(x=>x.date=x.date.split('T')[0]);
       setActivities(response);
+      setLoading(false);
    });
   },[]);
   function handleSelectActivity(id: string) {
@@ -35,18 +40,31 @@ function App() {
     setSelectedActivity(undefined);
   }
   function handleEditOrCreateAtivity(activity:Activity){
-    activity.id?setActivities([...activities.filter(x=>x.id!==activity.id),activity])
-    :setActivities([...activities,{...activity,id:uuid()}]);
-    setEditMode(false);
-    setSelectedActivity(activity);
+    setSubmitting(true);
+    if(activity.id){
+      agent.Activities.update(activity).then(()=>{
+        setActivities([...activities.filter(x=>x.id!==activity.id),activity]);
+      })
     }
-    function handleDeleteActivity(id: string){
-      console.log('id='+id);
-      let x=[...activities.filter(x=>x.id!==id)];
-      console.log(x);
-      setActivities(x);
+    else{
+      activity.id=uuid();
+      agent.Activities.create(activity).then(()=>{
+        setActivities([...activities,activity]);
+      })
+    }
+    setSelectedActivity(activity);
+    setEditMode(false);
+    setSubmitting(false);
     }
 
+    function handleDeleteActivity(id: string){
+      setSubmitting(true);
+      agent.Activities.delete(id).then(()=>{
+        setActivities([...activities.filter(x=>x.id!==id)]);
+      })
+      setSubmitting(false);
+    }
+    if(loading) return <LoadingComponent content="Loading app..."/>
   return (
     <>
       <NavBar handleFormOpen={handleFormOpen} />
@@ -61,6 +79,7 @@ function App() {
           handleSelectedActivity={handleSelectActivity}
           handleEditOrCreateAtivity={handleEditOrCreateAtivity}
           handleDeleteActivity={handleDeleteActivity}
+          submitting ={submitting}
         />
       </Container>
     </>
